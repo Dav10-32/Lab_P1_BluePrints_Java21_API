@@ -53,11 +53,13 @@ src/main/java/edu/eci/arsw/blueprints
 - Revisa el paquete `model` con las clases `Blueprint` y `Point`.  
 - Entiende la capa `persistence` con `InMemoryBlueprintPersistence`.  
 - Analiza la capa `services` (`BlueprintsServices`) y el controlador `BlueprintsAPIController`.
+  - **Resumen de lo realizado**: Se analizó la estructura del proyecto, identificando la separación de responsabilidades entre el modelo, la persistencia en memoria, los servicios de aplicación y los controladores REST.
 
 ### 2. Migración a persistencia en PostgreSQL
 - Configura una base de datos PostgreSQL (puedes usar Docker).  
 - Implementa un nuevo repositorio `PostgresBlueprintPersistence` que reemplace la versión en memoria.  
 - Mantén el contrato de la interfaz `BlueprintPersistence`.  
+  - **Resumen de lo realizado**: Se configuró un contenedor de PostgreSQL mediante Docker y se implementó `PostgresBlueprintPersistence` utilizando Spring Data JPA. Esto permitió pasar de una persistencia volátil en memoria a una base de datos relacional persistente.
 
 ### 3. Buenas prácticas de API REST
 - Cambia el path base de los controladores a `/api/v1/blueprints`.  
@@ -79,17 +81,20 @@ src/main/java/edu/eci/arsw/blueprints
     "data": { "author": "john", "name": "house", "points": [...] }
   }
   ```
+  - **Resumen de lo realizado**: Se aplicó el versionamiento de la API (`/api/v1`), se estandarizaron los códigos de respuesta (201 para creación, 404 para no encontrado, etc.) y se implementó un formato de respuesta genérico (`ApiResponse`) para consistencia en las respuestas del servidor.
 
 ### 4. OpenAPI / Swagger
 - Configura `springdoc-openapi` en el proyecto.  
 - Expón documentación automática en `/swagger-ui.html`.  
 - Anota endpoints con `@Operation` y `@ApiResponse`.
+  - **Resumen de lo realizado**: Se integró `springdoc-openapi` para generar documentación automática. Se añadieron anotaciones en el controlador para describir la funcionalidad de cada endpoint y los posibles esquemas de respuesta.
 
 ### 5. Filtros de *Blueprints*
 - Implementa filtros:
   - **RedundancyFilter**: elimina puntos duplicados consecutivos.  
   - **UndersamplingFilter**: conserva 1 de cada 2 puntos.  
 - Activa los filtros mediante perfiles de Spring (`redundancy`, `undersampling`).  
+  - **Resumen de lo realizado**: Se implementaron dos algoritmos de reducción de puntos: uno por redundancia (puntos iguales consecutivos) y otro por submuestreo (1 de cada 2 puntos). Se configuró el uso de perfiles de Spring para intercambiar el filtro activo en tiempo de ejecución.
 
 ---
 
@@ -108,7 +113,25 @@ src/main/java/edu/eci/arsw/blueprints
 
 ---
 
-## 📊 Criterios de evaluación
+## � Evidencias (Completar por el estudiante)
+
+### 1. Swagger UI
+Para obtener esta evidencia, inicia la aplicación y abre: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+> **Insertar aquí captura de pantalla de Swagger con los endpoints listados.**
+
+### 2. Persistencia en Base de Datos
+Para verificar que los datos se guardan en PostgreSQL:
+1. Conéctate a la base de datos (ej. usando pgAdmin o `docker exec`).
+2. Ejecuta: `SELECT * FROM blueprints;`
+> **Insertar aquí captura de pantalla de la consulta SQL o log de la base de datos.**
+
+### 3. Prueba de Filtros
+Ejecuta el comando `curl` para consultar un blueprint y verifica la reducción de puntos.
+> **Insertar aquí el JSON resultante que demuestre la aplicación del filtro (ej. menos puntos de los enviados originalmente).**
+
+---
+
+## �📊 Criterios de evaluación
 
 | Criterio | Peso |
 |----------|------|
