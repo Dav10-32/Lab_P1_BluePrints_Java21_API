@@ -58,6 +58,7 @@ src/main/java/edu/eci/arsw/blueprints
 - Configura una base de datos PostgreSQL (puedes usar Docker).  
 - Implementa un nuevo repositorio `PostgresBlueprintPersistence` que reemplace la versión en memoria.  
 - Mantén el contrato de la interfaz `BlueprintPersistence`.  
+  - **Lo realizado**: Se configuró un contenedor de PostgreSQL mediante Docker y se implementó `PostgresBlueprintPersistence`. Esto permitió pasar de una persistencia en memoria a una base de datos relacional con persistencia de datos.
 
 ### 3. Buenas prácticas de API REST
 - Cambia el path base de los controladores a `/api/v1/blueprints`.  
@@ -79,17 +80,20 @@ src/main/java/edu/eci/arsw/blueprints
     "data": { "author": "john", "name": "house", "points": [...] }
   }
   ```
+  - **Lo realizado**: Se aplicó el versionamiento de la API (`/api/v1`), se estandarizaron los códigos de respuesta (201 para creación, 404 para no encontrado, etc.) y se implementó un formato de respuesta (`ApiResponse`) para consistencia en las respuestas del servidor.
 
 ### 4. OpenAPI / Swagger
 - Configura `springdoc-openapi` en el proyecto.  
 - Expón documentación automática en `/swagger-ui.html`.  
 - Anota endpoints con `@Operation` y `@ApiResponse`.
+  - **Lo realizado**: Se integró `springdoc-openapi` para generar documentación automática. Se añadieron anotaciones en el controlador para describir la funcionalidad de cada endpoint y los esquemas de respuesta.
 
 ### 5. Filtros de *Blueprints*
 - Implementa filtros:
   - **RedundancyFilter**: elimina puntos duplicados consecutivos.  
   - **UndersamplingFilter**: conserva 1 de cada 2 puntos.  
 - Activa los filtros mediante perfiles de Spring (`redundancy`, `undersampling`).  
+  - **Lo realizado**: Se implementaron dos algoritmos de reducción de puntos: uno por redundancia (puntos iguales consecutivos) y otro por submuestreo (1 de cada 2 puntos).
 
 ---
 
@@ -107,6 +111,24 @@ src/main/java/edu/eci/arsw/blueprints
    - Breve explicación de buenas prácticas aplicadas.  
 
 ---
+
+## Evidencias
+
+### 1. Swagger UI
+- EndPoints disponibles:
+![EndPoints](docs/img/EndPoints.png)
+- EndPoint para añadir un blueprint:
+![EndPointAñadir](docs/img/EndPointAñadir.png)
+- EndPoint para añadir un punto a un blueprint:
+![EndPointAñadirPunto](docs/img/EndPointAñadirPunto.png)
+- EndPoint para obtener un blueprint:
+![EndPointGet](docs/img/EndPointGet.png)
+- EndPoint para obtener todos los blueprints de un autor:
+![EndPointGetByAuthor](docs/img/EndPointGetByAuthor.png)
+!
+### 2. Persistencia en Base de Datos
+Dado que se esta utilizando un contenedor en Docker para la base de datos en PostgreSQL, entramos directamente a la consola Postgre desde la terminal de mi computador y hacemos consultas de tablas, autores y puntos:
+![MensajesBaseDeDatos](docs/img/MensajesBBDD.png)
 
 ## 📊 Criterios de evaluación
 
