@@ -115,10 +115,15 @@ src/main/java/edu/eci/arsw/blueprints
 ## Evidencias
 
 ### 1. Swagger UI
+- EndPoints disponibles:
 ![EndPoints](docs/img/EndPoints.png)
+- EndPoint para añadir un blueprint:
 ![EndPointAñadir](docs/img/EndPointAñadir.png)
+- EndPoint para añadir un punto a un blueprint:
 ![EndPointAñadirPunto](docs/img/EndPointAñadirPunto.png)
+- EndPoint para obtener un blueprint:
 ![EndPointGet](docs/img/EndPointGet.png)
+- EndPoint para obtener todos los blueprints de un autor:
 ![EndPointGetByAuthor](docs/img/EndPointGetByAuthor.png)
 !
 ### 2. Persistencia en Base de Datos
