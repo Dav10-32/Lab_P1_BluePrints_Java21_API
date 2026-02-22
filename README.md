@@ -115,17 +115,17 @@ src/main/java/edu/eci/arsw/blueprints
 ## Evidencias
 
 ### 1. Swagger UI
-![EndPoints](img/EndPoints.png)
-![EndPointAñadir](img/EndPointAñadir.png)
-![EndPointAñadirPunto](img/EndPointAñadirPunto.png)
-![EndPointGet](img/EndPointGet.png)
-![EndPointGetByAuthor](img/EndPointGetByAuthor.png)
+![EndPoints](docs/img/EndPoints.png)
+![EndPointAñadir](docs/img/EndPointAñadir.png)
+![EndPointAñadirPunto](docs/img/EndPointAñadirPunto.png)
+![EndPointGet](docs/img/EndPointGet.png)
+![EndPointGetByAuthor](docs/img/EndPointGetByAuthor.png)
 !
 ### 2. Persistencia en Base de Datos
 Dado que se esta utilizando un contenedor en Docker para la base de datos en PostgreSQL, entramos directamente a la consola Postgre desde la terminal de mi computador y hacemos consultas de tablas, autores y puntos:
-![MensajesBaseDeDatos](img/MensajesBBDD.png)
+![MensajesBaseDeDatos](docs/img/MensajesBBDD.png)
 
-## �📊 Criterios de evaluación
+## 📊 Criterios de evaluación
 
 | Criterio | Peso |
 |----------|------|
