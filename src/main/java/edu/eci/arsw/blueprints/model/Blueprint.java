@@ -1,5 +1,6 @@
 package edu.eci.arsw.blueprints.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,12 +17,15 @@ import java.util.Objects;
 public class Blueprint {
 
     @Id
+    @Schema(description = "The author of the blueprint", example = "john")
     private String author;
 
     @Id
+    @Schema(description = "The unique name of the blueprint for this author", example = "house")
     private String name;
 
     @ElementCollection
+    @Schema(description = "List of points that form the blueprint")
     private List<Point> points;
 
     public Blueprint() {

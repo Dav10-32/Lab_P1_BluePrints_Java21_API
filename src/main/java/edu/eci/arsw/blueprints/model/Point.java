@@ -1,12 +1,16 @@
 package edu.eci.arsw.blueprints.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
+@Schema(description = "A coordinate point (x,y)")
 public class Point implements Serializable {
 
+    @Schema(description = "X coordinate", example = "10")
     private int x;
+    @Schema(description = "Y coordinate", example = "20")
     private int y;
 
     public Point() {

@@ -6,6 +6,10 @@ import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -28,15 +32,23 @@ public class BlueprintsAPIController {
     }
 
     @GetMapping
-    @io.swagger.v3.oas.annotations.Operation(summary = "Get all blueprints", description = "Retrieves a list of all blueprints in the system")
+    @Operation(summary = "Get all blueprints", description = "Retrieves a list of all blueprints in the system")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Blueprints retrieved successfully", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ResponseEntity<ApiResponse<Set<Blueprint>>> getAll() {
         Set<Blueprint> blueprints = services.getAllBlueprints();
         return ResponseEntity.ok(new ApiResponse<>(200, "Blueprints retrieved successfully", blueprints));
     }
 
     @GetMapping("/{author}")
-    @io.swagger.v3.oas.annotations.Operation(summary = "Get blueprints by author", description = "Retrieves all blueprints belonging to a specific author")
-    public ResponseEntity<ApiResponse<?>> byAuthor(@PathVariable String author) {
+    @Operation(summary = "Get blueprints by author", description = "Retrieves all blueprints belonging to a specific author")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Author blueprints retrieved"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Author not found", content = @Content)
+    })
+    public ResponseEntity<ApiResponse<?>> byAuthor(
+            @Parameter(description = "The name of the author", required = true) @PathVariable String author) {
         try {
             Set<Blueprint> blueprints = services.getBlueprintsByAuthor(author);
             return ResponseEntity.ok(new ApiResponse<>(200, "Author blueprints retrieved", blueprints));
@@ -47,8 +59,14 @@ public class BlueprintsAPIController {
     }
 
     @GetMapping("/{author}/{bpname}")
-    @io.swagger.v3.oas.annotations.Operation(summary = "Get specific blueprint", description = "Retrieves a specific blueprint by author and name")
-    public ResponseEntity<ApiResponse<?>> byAuthorAndName(@PathVariable String author, @PathVariable String bpname) {
+    @Operation(summary = "Get specific blueprint", description = "Retrieves a specific blueprint by author and name")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Blueprint found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Blueprint not found", content = @Content)
+    })
+    public ResponseEntity<ApiResponse<?>> byAuthorAndName(
+            @Parameter(description = "The name of the author", required = true) @PathVariable String author,
+            @Parameter(description = "The name of the blueprint", required = true) @PathVariable String bpname) {
         try {
             Blueprint bp = services.getBlueprint(author, bpname);
             return ResponseEntity.ok(new ApiResponse<>(200, "Blueprint found", bp));
@@ -59,13 +77,19 @@ public class BlueprintsAPIController {
     }
 
     @PostMapping
-    @io.swagger.v3.oas.annotations.Operation(summary = "Create new blueprint", description = "Adds a new blueprint to the system")
-    public ResponseEntity<ApiResponse<?>> add(@Valid @RequestBody NewBlueprintRequest req) {
+    @Operation(summary = "Create new blueprint", description = "Adds a new blueprint to the system")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Blueprint created successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Blueprint already exists", content = @Content)
+    })
+    public ResponseEntity<ApiResponse<?>> add(
+            @Valid @RequestBody NewBlueprintRequest req) {
         try {
             Blueprint bp = new Blueprint(req.author(), req.name(), req.points());
             services.addNewBlueprint(bp);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new ApiResponse<>(201, "Blueprint created successfully", bp));
+                    .body(new ApiResponse<>(201, "Blueprint created successfully",
+                            bp));
         } catch (BlueprintPersistenceException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ApiResponse<>(409, e.getMessage(), null));
@@ -73,8 +97,14 @@ public class BlueprintsAPIController {
     }
 
     @PutMapping("/{author}/{bpname}/points")
-    @io.swagger.v3.oas.annotations.Operation(summary = "Add point to blueprint", description = "Updates an existing blueprint by adding a new point")
-    public ResponseEntity<ApiResponse<?>> addPoint(@PathVariable String author, @PathVariable String bpname,
+    @Operation(summary = "Add point to blueprint", description = "Updates an existing blueprint by adding a new point")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "202", description = "Point added successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Blueprint not found", content = @Content)
+    })
+    public ResponseEntity<ApiResponse<?>> addPoint(
+            @Parameter(description = "The name of the author", required = true) @PathVariable String author,
+            @Parameter(description = "The name of the blueprint", required = true) @PathVariable String bpname,
             @RequestBody Point p) {
         try {
             services.addPoint(author, bpname, p.x(), p.y());
@@ -85,5 +115,4 @@ public class BlueprintsAPIController {
                     .body(new ApiResponse<>(404, e.getMessage(), null));
         }
     }
-
 }
